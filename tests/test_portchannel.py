@@ -4,8 +4,10 @@ import json
 import pytest
 
 from swsscommon import swsscommon
+from flaky import flaky
 
 
+@pytest.mark.flaky
 class TestPortchannel(object):
     def test_Portchannel(self, dvs, testlog):
 

@@ -2,12 +2,14 @@ import time
 import pytest
 
 from swsscommon import swsscommon
+from flaky import flaky
 
 
 def create_fvs(**kwargs):
     return swsscommon.FieldValuePairs(kwargs.items())
 
 
+@pytest.mark.flaky
 class TestTunnelBase(object):
     APP_TUNNEL_DECAP_TABLE_NAME = "TUNNEL_DECAP_TABLE"
     ASIC_TUNNEL_TABLE           = "ASIC_STATE:SAI_OBJECT_TYPE_TUNNEL"
@@ -134,7 +136,7 @@ class TestTunnelBase(object):
         status, fvs = tunnel_table.get(tunnel_sai_obj)
 
         # get overlay loopback interface oid to check if it is deleted with the tunnel
-        overlay_infs_id = {f:v for f,v in fvs}["SAI_TUNNEL_ATTR_OVERLAY_INTERFACE"] 
+        overlay_infs_id = {f:v for f,v in fvs}["SAI_TUNNEL_ATTR_OVERLAY_INTERFACE"]
 
         ps = swsscommon.ProducerStateTable(db, self.APP_TUNNEL_DECAP_TABLE_NAME)
         ps.set(tunnel_name, create_fvs(), 'DEL')

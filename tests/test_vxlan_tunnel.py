@@ -5,6 +5,7 @@ import time
 import pytest
 
 from swsscommon import swsscommon
+from flaky import flaky
 from pprint import pprint
 
 
@@ -243,6 +244,7 @@ def get_lo(dvs):
     return lo_id
 
 
+@pytest.mark.flaky
 class TestVxlan(object):
     def test_vxlan_term_orch(self, dvs, testlog):
         tunnel_map_ids       = set()

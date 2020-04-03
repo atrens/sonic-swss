@@ -166,8 +166,10 @@ class DockerVirtualSwitch(object):
         self.syncd = ['syncd']
         self.rtd   = ['fpmsyncd', 'zebra', 'staticd']
         self.teamd = ['teamsyncd', 'teammgrd']
-        self.natd = ['natsyncd', 'natmgrd']
-        self.alld  = self.basicd + self.swssd + self.syncd + self.rtd + self.teamd + self.natd
+        # FIXME: We need to verify that NAT processes are running, once the
+        # appropriate changes are merged into sonic-buildimage
+        # self.natd = ['natsyncd', 'natmgrd']
+        self.alld  = self.basicd + self.swssd + self.syncd + self.rtd + self.teamd # + self.natd
         self.client = docker.from_env()
         self.appldb = None
 
@@ -950,25 +952,25 @@ class DockerVirtualSwitch(object):
             self.asic_db = db
 
         return self.asic_db
-    
+
     def get_counters_db(self):
         if not self.counters_db:
             self.counters_db = dvs_db.DVSDatabase(self.COUNTERS_DB_ID, self.redis_sock)
 
         return self.counters_db
-    
+
     def get_config_db(self):
         if not self.config_db:
             self.config_db = dvs_db.DVSDatabase(self.CONFIG_DB_ID, self.redis_sock)
 
         return self.config_db
-    
+
     def get_flex_db(self):
         if not self.flex_db:
             self.flex_db = dvs_db.DVSDatabase(self.FLEX_COUNTER_DB_ID, self.redis_sock)
 
         return self.flex_db
-    
+
     def get_state_db(self):
         if not self.state_db:
             self.state_db = dvs_db.DVSDatabase(self.STATE_DB_ID, self.redis_sock)

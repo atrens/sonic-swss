@@ -4,8 +4,10 @@ import json
 import pytest
 
 from swsscommon import swsscommon
+from flaky import flaky
 
 
+@pytest.mark.flaky
 class TestDtel(object):
     def test_DtelGlobalAttribs(self, dvs, testlog):
 
@@ -39,10 +41,10 @@ class TestDtel(object):
         fvs = swsscommon.FieldValuePairs([("QUEUE_REPORT", "TRUE")])
         tbl.set("QUEUE_REPORT", fvs)
 
-        fvs = swsscommon.FieldValuePairs([("Ethernet0", "Ethernet0"), ("Ethernet4", "Ethernet4")])  
+        fvs = swsscommon.FieldValuePairs([("Ethernet0", "Ethernet0"), ("Ethernet4", "Ethernet4")])
         tbl.set("SINK_PORT_LIST", fvs)
 
-        fvs = swsscommon.FieldValuePairs([("INT_L4_DSCP_VALUE", "128"), ("INT_L4_DSCP_MASK", "255")])  
+        fvs = swsscommon.FieldValuePairs([("INT_L4_DSCP_VALUE", "128"), ("INT_L4_DSCP_MASK", "255")])
         tbl.set("INT_L4_DSCP", fvs)
 
         time.sleep(1)
@@ -50,11 +52,11 @@ class TestDtel(object):
         atbl = swsscommon.Table(adb, "ASIC_STATE:SAI_OBJECT_TYPE_DTEL")
         keys = atbl.getKeys()
         assert len(keys) > 0
-        
+
         for k in keys:
             (status, fvs) = atbl.get(k)
             assert status == True
-            
+
             for fv in fvs:
                 if fv[0] == "SAI_DTEL_ATTR_SWITCH_ID":
                     assert fv[1] == "1"
@@ -86,20 +88,20 @@ class TestDtel(object):
         tbl._del("DROP_REPORT")
         tbl._del("QUEUE_REPORT")
         tbl._del("SINK_PORT_LIST")
-    
+
     def test_DtelReportSessionAttribs(self, dvs, testlog):
-    
+
         db = swsscommon.DBConnector(4, dvs.redis_sock, 0)
         adb = swsscommon.DBConnector(1, dvs.redis_sock, 0)
-    
+
         # create DTel report session attributes in config db
         tbl = swsscommon.Table(db, "DTEL_REPORT_SESSION")
 
-        fvs = swsscommon.FieldValuePairs([("SRC_IP", "10.10.10.1"), 
-                                          ("DST_IP_LIST", "20.20.20.1;20.20.20.2;20.20.20.3"), 
-                                          ("VRF", "default"), 
-                                          ("TRUNCATE_SIZE", "256"), 
-                                          ("UDP_DEST_PORT", "2000")])  
+        fvs = swsscommon.FieldValuePairs([("SRC_IP", "10.10.10.1"),
+                                          ("DST_IP_LIST", "20.20.20.1;20.20.20.2;20.20.20.3"),
+                                          ("VRF", "default"),
+                                          ("TRUNCATE_SIZE", "256"),
+                                          ("UDP_DEST_PORT", "2000")])
         tbl.set("RS-1", fvs)
 
         time.sleep(1)
@@ -107,11 +109,11 @@ class TestDtel(object):
         atbl = swsscommon.Table(adb, "ASIC_STATE:SAI_OBJECT_TYPE_DTEL_REPORT_SESSION")
         keys = atbl.getKeys()
         assert len(keys) > 0
-        
+
         for k in keys:
             (status, fvs) = atbl.get(k)
             assert status == True
-            
+
             for fv in fvs:
                 if fv[0] == "SAI_DTEL_REPORT_SESSION_ATTR_SRC_IP":
                     assert fv[1] == "10.10.10.1"
@@ -129,19 +131,19 @@ class TestDtel(object):
         tbl._del("RS-1")
 
     def test_DtelINTSessionAttribs(self, dvs, testlog):
-    
+
         db = swsscommon.DBConnector(4, dvs.redis_sock, 0)
         adb = swsscommon.DBConnector(1, dvs.redis_sock, 0)
-    
+
         # create DTel INT session attributes in config db
         tbl = swsscommon.Table(db, "DTEL_INT_SESSION")
 
-        fvs = swsscommon.FieldValuePairs([("MAX_HOP_COUNT", "50"), 
-                                          ("COLLECT_SWITCH_ID", "TRUE"), 
-                                          ("COLLECT_INGRESS_TIMESTAMP", "TRUE"), 
-                                          ("COLLECT_EGRESS_TIMESTAMP", "TRUE"), 
-                                          ("COLLECT_SWITCH_PORTS", "TRUE"), 
-                                          ("COLLECT_QUEUE_INFO", "TRUE")])  
+        fvs = swsscommon.FieldValuePairs([("MAX_HOP_COUNT", "50"),
+                                          ("COLLECT_SWITCH_ID", "TRUE"),
+                                          ("COLLECT_INGRESS_TIMESTAMP", "TRUE"),
+                                          ("COLLECT_EGRESS_TIMESTAMP", "TRUE"),
+                                          ("COLLECT_SWITCH_PORTS", "TRUE"),
+                                          ("COLLECT_QUEUE_INFO", "TRUE")])
         tbl.set("INT-1", fvs)
 
         time.sleep(1)
@@ -149,11 +151,11 @@ class TestDtel(object):
         atbl = swsscommon.Table(adb, "ASIC_STATE:SAI_OBJECT_TYPE_DTEL_INT_SESSION")
         keys = atbl.getKeys()
         assert len(keys) > 0
-        
+
         for k in keys:
             (status, fvs) = atbl.get(k)
             assert status == True
-            
+
             for fv in fvs:
                 if fv[0] == "SAI_DTEL_INT_SESSION_ATTR_MAX_HOP_COUNT":
                     assert fv[1] == "50"
@@ -173,17 +175,17 @@ class TestDtel(object):
         tbl._del("INT-1")
 
     def test_DtelQueueReportAttribs(self, dvs, testlog):
-    
+
         db = swsscommon.DBConnector(4, dvs.redis_sock, 0)
         adb = swsscommon.DBConnector(1, dvs.redis_sock, 0)
-    
+
         # create DTel queue report attributes in config db
         tbl = swsscommon.Table(db, "DTEL_QUEUE_REPORT")
 
-        fvs = swsscommon.FieldValuePairs([("QUEUE_DEPTH_THRESHOLD", "1000"), 
-                                          ("QUEUE_LATENCY_THRESHOLD", "2000"), 
-                                          ("THRESHOLD_BREACH_QUOTA", "3000"), 
-                                          ("REPORT_TAIL_DROP", "TRUE")])  
+        fvs = swsscommon.FieldValuePairs([("QUEUE_DEPTH_THRESHOLD", "1000"),
+                                          ("QUEUE_LATENCY_THRESHOLD", "2000"),
+                                          ("THRESHOLD_BREACH_QUOTA", "3000"),
+                                          ("REPORT_TAIL_DROP", "TRUE")])
         tbl.set("Ethernet0|0", fvs)
 
         time.sleep(1)
@@ -191,11 +193,11 @@ class TestDtel(object):
         atbl = swsscommon.Table(adb, "ASIC_STATE:SAI_OBJECT_TYPE_DTEL_QUEUE_REPORT")
         keys = atbl.getKeys()
         assert len(keys) > 0
-        
+
         for k in keys:
             (status, fvs) = atbl.get(k)
             assert status == True
-            
+
             for fv in fvs:
                 if fv[0] == "SAI_DTEL_QUEUE_REPORT_ATTR_DEPTH_THRESHOLD":
                     assert fv[1] == "1000"
@@ -211,48 +213,48 @@ class TestDtel(object):
                     assert False
 
         tbl._del("Ethernet0|0")
-    
+
 
     def test_DtelEventAttribs(self, dvs, testlog):
-    
+
         db = swsscommon.DBConnector(4, dvs.redis_sock, 0)
         adb = swsscommon.DBConnector(1, dvs.redis_sock, 0)
-    
+
         # first create DTel report session in config db
         rtbl = swsscommon.Table(db, "DTEL_REPORT_SESSION")
 
-        fvs = swsscommon.FieldValuePairs([("SRC_IP", "10.10.10.1"), 
-                                          ("DST_IP_LIST", "20.20.20.1;20.20.20.2;20.20.20.3"), 
-                                          ("VRF", "default"), 
-                                          ("TRUNCATE_SIZE", "256"), 
-                                          ("UDP_DEST_PORT", "2000")])  
+        fvs = swsscommon.FieldValuePairs([("SRC_IP", "10.10.10.1"),
+                                          ("DST_IP_LIST", "20.20.20.1;20.20.20.2;20.20.20.3"),
+                                          ("VRF", "default"),
+                                          ("TRUNCATE_SIZE", "256"),
+                                          ("UDP_DEST_PORT", "2000")])
         rtbl.set("RS-1", fvs)
 
         # create DTel event attributes in config db
         tbl = swsscommon.Table(db, "DTEL_EVENT")
 
-        fvs = swsscommon.FieldValuePairs([("EVENT_REPORT_SESSION", "RS-1"), 
-                                          ("EVENT_DSCP_VALUE", "65")])  
+        fvs = swsscommon.FieldValuePairs([("EVENT_REPORT_SESSION", "RS-1"),
+                                          ("EVENT_DSCP_VALUE", "65")])
         tbl.set("EVENT_TYPE_FLOW_STATE", fvs)
 
-        fvs = swsscommon.FieldValuePairs([("EVENT_REPORT_SESSION", "RS-1"), 
-                                          ("EVENT_DSCP_VALUE", "64")])  
+        fvs = swsscommon.FieldValuePairs([("EVENT_REPORT_SESSION", "RS-1"),
+                                          ("EVENT_DSCP_VALUE", "64")])
         tbl.set("EVENT_TYPE_FLOW_REPORT_ALL_PACKETS", fvs)
 
-        fvs = swsscommon.FieldValuePairs([("EVENT_REPORT_SESSION", "RS-1"), 
-                                          ("EVENT_DSCP_VALUE", "63")])  
+        fvs = swsscommon.FieldValuePairs([("EVENT_REPORT_SESSION", "RS-1"),
+                                          ("EVENT_DSCP_VALUE", "63")])
         tbl.set("EVENT_TYPE_FLOW_TCPFLAG", fvs)
 
-        fvs = swsscommon.FieldValuePairs([("EVENT_REPORT_SESSION", "RS-1"), 
-                                          ("EVENT_DSCP_VALUE", "62")])  
+        fvs = swsscommon.FieldValuePairs([("EVENT_REPORT_SESSION", "RS-1"),
+                                          ("EVENT_DSCP_VALUE", "62")])
         tbl.set("EVENT_TYPE_QUEUE_REPORT_THRESHOLD_BREACH", fvs)
 
-        fvs = swsscommon.FieldValuePairs([("EVENT_REPORT_SESSION", "RS-1"), 
-                                          ("EVENT_DSCP_VALUE", "61")])  
+        fvs = swsscommon.FieldValuePairs([("EVENT_REPORT_SESSION", "RS-1"),
+                                          ("EVENT_DSCP_VALUE", "61")])
         tbl.set("EVENT_TYPE_QUEUE_REPORT_TAIL_DROP", fvs)
 
-        fvs = swsscommon.FieldValuePairs([("EVENT_REPORT_SESSION", "RS-1"), 
-                                          ("EVENT_DSCP_VALUE", "60")])  
+        fvs = swsscommon.FieldValuePairs([("EVENT_REPORT_SESSION", "RS-1"),
+                                          ("EVENT_DSCP_VALUE", "60")])
         tbl.set("EVENT_TYPE_DROP_REPORT", fvs)
 
         time.sleep(1)
@@ -260,13 +262,13 @@ class TestDtel(object):
         atbl = swsscommon.Table(adb, "ASIC_STATE:SAI_OBJECT_TYPE_DTEL_EVENT")
         keys = atbl.getKeys()
         assert len(keys) > 0
-        
+
         for k in keys:
             (status, fvs) = atbl.get(k)
             assert status == True
-           
-        expected_dscp = None 
-        actual_dscp = None 
+
+        expected_dscp = None
+        actual_dscp = None
         for fv in fvs:
             if fv[0] == "SAI_DTEL_EVENT_ATTR_TYPE":
                 if fv[1] == "SAI_DTEL_EVENT_TYPE_QUEUE_REPORT_TAIL_DROP":
@@ -289,7 +291,7 @@ class TestDtel(object):
         assert actual_dscp == expected_dscp
 
         rtbl._del("RS-1")
-        tbl._del("EVENT_TYPE_FLOW_STATE")  
+        tbl._del("EVENT_TYPE_FLOW_STATE")
         tbl._del("EVENT_TYPE_FLOW_REPORT_ALL_PACKETS")
         tbl._del("EVENT_TYPE_FLOW_TCPFLAG")
         tbl._del("EVENT_TYPE_QUEUE_REPORT_THRESHOLD_BREACH")

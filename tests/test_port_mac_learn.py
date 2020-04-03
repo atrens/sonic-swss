@@ -3,8 +3,10 @@ import os
 import pytest
 
 from swsscommon import swsscommon
+from flaky import flaky
 
 
+@pytest.mark.flaky
 class TestPortMacLearn(object):
     def setup_db(self, dvs):
         self.pdb = swsscommon.DBConnector(swsscommon.APPL_DB, dvs.redis_sock, 0)
@@ -60,7 +62,7 @@ class TestPortMacLearn(object):
             return True
         else:
             return False
-        
+
     def test_PortMacLearnMode(self, dvs, testlog):
         self.setup_db(dvs)
 
@@ -126,7 +128,7 @@ class TestPortMacLearn(object):
                                           ("mtu", "9100")])
         tbl.set("PortChannel001", fvs)
         time.sleep(1)
-        
+
         # create vlan
         tbl = swsscommon.Table(self.cdb, "VLAN")
         fvs = swsscommon.FieldValuePairs([("vlanid", "3")])

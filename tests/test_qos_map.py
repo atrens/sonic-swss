@@ -4,6 +4,7 @@ import sys
 import time
 
 from swsscommon import swsscommon
+from flaky import flaky
 
 CFG_DOT1P_TO_TC_MAP_TABLE_NAME =  "DOT1P_TO_TC_MAP"
 CFG_DOT1P_TO_TC_MAP_KEY = "AZURE"
@@ -23,6 +24,7 @@ CFG_PORT_QOS_MAP_FIELD = "dot1p_to_tc_map"
 CFG_PORT_TABLE_NAME = "PORT"
 
 
+@pytest.mark.flaky
 class TestDot1p(object):
     def connect_dbs(self, dvs):
         self.asic_db = swsscommon.DBConnector(1, dvs.redis_sock, 0)

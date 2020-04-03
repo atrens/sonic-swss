@@ -1585,10 +1585,7 @@ sai_status_t PortsOrch::removePort(sai_object_id_t port_id)
         return status; 
     }
 
-    m_portCount--;
-    SWSS_LOG_NOTICE("Remove port %" PRIx64, port_id);
-
-    return status;
+    return true;
 }
 
 string PortsOrch::getQueueWatermarkFlexCounterTableKey(string key)

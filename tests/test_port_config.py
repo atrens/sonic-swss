@@ -4,6 +4,7 @@ import os
 import pytest
 
 from swsscommon import swsscommon
+from flaky import flaky
 
 
 @pytest.yield_fixture
@@ -14,6 +15,7 @@ def port_config(request, dvs):
     dvs.runcmd("mv %s.bak %s" % (file_name, file_name))
 
 
+@pytest.mark.flaky
 class TestPortConfig(object):
 
     def getPortName(self, dvs, port_vid):

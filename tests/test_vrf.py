@@ -4,9 +4,11 @@ import random
 import pytest
 
 from swsscommon import swsscommon
+from flaky import flaky
 from pprint import pprint
 
 
+@pytest.mark.flaky
 class TestVrf(object):
     def setup_db(self, dvs):
         self.pdb = swsscommon.DBConnector(0, dvs.redis_sock, 0)

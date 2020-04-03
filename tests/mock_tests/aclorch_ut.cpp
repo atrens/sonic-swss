@@ -577,7 +577,7 @@ namespace aclorch_test
         // consistency validation with CRM
         bool validateResourceCountWithCrm(const AclOrch *aclOrch, CrmOrch *crmOrch)
         {
-             // Verify ACL Tables
+             // Verify ACL Tables            
             auto const &resourceMap = Portal::CrmOrchInternal::getResourceMap(crmOrch);
             uint32_t crm_acl_table_cnt = 0;
             for (auto const &kv : resourceMap.at(CrmResourceType::CRM_ACL_TABLE).countersMap)
@@ -591,7 +591,7 @@ namespace aclorch_test
                                 << ") and AclOrch " << Portal::AclOrchInternal::getAclTables(aclOrch).size();
                 return false;
             }
-
+            
 
             // Verify ACL Rules
             //

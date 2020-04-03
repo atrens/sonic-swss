@@ -3,6 +3,7 @@ import time
 import json
 
 from swsscommon import swsscommon
+from flaky import flaky
 
 CFG_VLAN_SUB_INTF_TABLE_NAME = "VLAN_SUB_INTERFACE"
 CFG_PORT_TABLE_NAME = "PORT"
@@ -25,6 +26,7 @@ LAG_PREFIX = "PortChannel"
 VLAN_SUB_INTERFACE_SEPARATOR = "."
 
 
+@pytest.mark.flaky
 class TestSubPortIntf(object):
     SUB_PORT_INTERFACE_UNDER_TEST = "Ethernet64.10"
     LAG_SUB_PORT_INTERFACE_UNDER_TEST = "PortChannel1.20"

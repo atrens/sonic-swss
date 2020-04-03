@@ -3,8 +3,10 @@ import json
 import pytest
 
 from swsscommon import swsscommon
+from flaky import flaky
 
-@pytest.mark.xfail(reason="vs image issue: Azure/sonic-sairedis#574")
+
+@pytest.mark.flaky
 class TestRouterInterface(object):
     def setup_db(self, dvs):
         self.pdb = swsscommon.DBConnector(0, dvs.redis_sock, 0)

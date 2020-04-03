@@ -7,9 +7,21 @@ The DVS tests work by publishing configuration updates to redis (typically Confi
 
 SWSS, Redis, and all the other required components run inside a virtual switch Docker container, meaning that these test cases can be run on any Linux machine - no special hardware required!
 
-## Setting up your test environment
-1. [Install Docker CE](https://docs.docker.com/install/linux/docker-ce/ubuntu/). Be sure to follow the [post-install instructions](https://docs.docker.com/install/linux/linux-postinstall/) so that you don't need sudo privileges to run docker commands.
-2. Install the external dependencies needed to run the tests:
+- Install docker and pytest on your dev machine
+    ```
+    sudo pip install docker==3.5.0
+    sudo pip install pytest==3.3.0
+    sudo pip install flaky docker redis
+    ```
+- Compile and install swss common library. Follow instructions [here](https://github.com/Azure/sonic-swss-common/blob/master/README.md) to first install prerequisites to build swss common library.
+    ```
+    cd sonic-swss-common
+    ./autogen.sh
+    dpkg-buildpackage -us -uc -b
+    dpkg -i ../libswsscommon_1.0.0_amd64.deb
+    dpkg -i ../python-swsscommon_1.0.0_amd64.deb
+    ```
+- Build and load docker-sonic-vs
 
     ```
     sudo modprobe team
@@ -34,7 +46,7 @@ SWSS, Redis, and all the other required components run inside a virtual switch D
 4. Load the `docker-sonic-vs.gz` file into docker. You can get the image by:
     - [Building it from scratch](https://github.com/Azure/sonic-buildimage)
     - [Downloading the latest build from Jenkins](https://sonic-jenkins.westus2.cloudapp.azure.com/job/vs/job/buildimage-vs-all/lastSuccessfulBuild/artifact/target/)
-    
+
     Once you have the file, you can load it into docker by running `docker load < docker-sonic-vs.gz`.
 
 ## Running the tests
@@ -60,7 +72,7 @@ For those developing new features for SWSS or the DVS framework, you might find 
     ```
 
 4. You can specify your persistent DVS container when running the tests as follows:
-    
+
     ```
     sudo pytest --dvsname=vs
     ```
@@ -106,4 +118,4 @@ For those developing new features for SWSS or the DVS framework, you might find 
     ```
 
     You can mitigate this by editing the `DEFAULT_DOCKER_API_VERSION` in `/usr/local/lib/python2.7/dist-packages/docker/constants.py`, or by upgrading to a newer version of Docker CE. See [relevant GitHub discussion](https://github.com/drone/drone/issues/2048).
-    
+
