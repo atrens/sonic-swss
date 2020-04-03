@@ -177,7 +177,7 @@ class TestNatFeature(object):
 
         (status, fvs) = tbl.get("67.66.65.1:670")
 
-        assert fvs== (('translated_ip', '18.18.18.2'), ('translated_l4_port', '180'), ('nat_type', 'dnat'), ('entry_type', 'static')) 
+        assert fvs== (('translated_ip', '18.18.18.2'), ('translated_l4_port', '180'), ('nat_type', 'dnat'), ('entry_type', 'static'))
 
         #check the entry in asic db
         tbl = swsscommon.Table(self.asicdb, "ASIC_STATE:SAI_OBJECT_TYPE_NAT_ENTRY")
@@ -246,11 +246,11 @@ class TestNatFeature(object):
 
         (status, fvs) = tbl.get("67.66.65.2:67.66.65.1")
 
-        assert fvs== (('translated_src_ip', '18.18.18.1'), ('translated_dst_ip', '18.18.18.2'), ('entry_type', 'static')) 
+        assert fvs== (('translated_src_ip', '18.18.18.1'), ('translated_dst_ip', '18.18.18.2'), ('entry_type', 'static'))
 
         (status, fvs) = tbl.get("18.18.18.2:18.18.18.1")
 
-        assert fvs== (('translated_src_ip', '67.66.65.1'), ('translated_dst_ip', '67.66.65.2'), ('entry_type', 'static')) 
+        assert fvs== (('translated_src_ip', '67.66.65.1'), ('translated_dst_ip', '67.66.65.2'), ('entry_type', 'static'))
 
         #check the entry in asic db
         tbl = swsscommon.Table(self.asicdb, "ASIC_STATE:SAI_OBJECT_TYPE_NAT_ENTRY")

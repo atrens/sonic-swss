@@ -413,7 +413,6 @@ void IntfsOrch::doTask(Consumer &consumer)
     while (it != consumer.m_toSync.end())
     {
         KeyOpFieldsValuesTuple t = it->second;
-
         vector<string> keys = tokenize(kfvKey(t), ':');
         string alias(keys[0]);
 

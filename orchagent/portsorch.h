@@ -21,7 +21,6 @@
 
 typedef std::vector<sai_uint32_t> PortSupportedSpeeds;
 
-
 static const map<sai_port_oper_status_t, string> oper_status_strings =
 {
     { SAI_PORT_OPER_STATUS_UNKNOWN,     "unknown" },
@@ -78,9 +77,24 @@ public:
 
     bool setHostIntfsOperStatus(const Port& port, bool up) const;
     void updateDbPortOperStatus(const Port& port, sai_port_oper_status_t status) const;
-    bool createBindAclTableGroup(sai_object_id_t id, sai_object_id_t &group_oid, acl_stage_type_t acl_stage = ACL_STAGE_EGRESS);
-    bool bindAclTable(sai_object_id_t id, sai_object_id_t table_oid, sai_object_id_t &group_member_oid, acl_stage_type_t acl_stage = ACL_STAGE_INGRESS);
-
+    bool createBindAclTableGroup(sai_object_id_t  port_oid,
+                   sai_object_id_t  acl_table_oid,
+                   sai_object_id_t  &group_oid,
+                   acl_stage_type_t acl_stage = ACL_STAGE_EGRESS);
+    bool unbindRemoveAclTableGroup(sai_object_id_t  port_oid,
+                                   sai_object_id_t  acl_table_oid,
+                                   acl_stage_type_t acl_stage);
+    bool bindAclTable(sai_object_id_t  id,
+                      sai_object_id_t  table_oid,
+                      sai_object_id_t  &group_member_oid,
+                      acl_stage_type_t acl_stage = ACL_STAGE_INGRESS);
+    bool unbindAclTable(sai_object_id_t  port_oid,
+                        sai_object_id_t  acl_table_oid,
+                        sai_object_id_t  acl_group_member_oid,
+                        acl_stage_type_t acl_stage);
+    bool bindUnbindAclTableGroup(Port &port,
+                                 bool ingress,
+     bool bind);
     bool getPortPfc(sai_object_id_t portId, uint8_t *pfc_bitmask);
     bool setPortPfc(sai_object_id_t portId, uint8_t pfc_bitmask);
 
@@ -94,6 +108,7 @@ public:
     bool removeSubPort(const string &alias);
 private:
     unique_ptr<Table> m_counterTable;
+    unique_ptr<Table> m_counterLagTable;
     unique_ptr<Table> m_portTable;
     unique_ptr<Table> m_queueTable;
     unique_ptr<Table> m_queuePortTable;
@@ -149,6 +164,8 @@ private:
 
     void doTask(NotificationConsumer &consumer);
 
+    void removePortFromLanesMap(string alias);
+    void removePortFromPortListMap(sai_object_id_t port_id);
     void removeDefaultVlanMembers();
     void removeDefaultBridgePorts();
 
@@ -177,8 +194,9 @@ private:
     void getLagMember(Port &lag, vector<Port> &portv);
 
     bool addPort(const set<int> &lane_set, uint32_t speed, int an=0, string fec="");
-    bool removePort(sai_object_id_t port_id);
+    sai_status_t removePort(sai_object_id_t port_id);
     bool initPort(const string &alias, const set<int> &lane_set);
+    void deInitPort(string alias, sai_object_id_t port_id);
 
     bool setPortAdminStatus(sai_object_id_t id, bool up);
     bool getPortAdminStatus(sai_object_id_t id, bool& up);
@@ -214,6 +232,8 @@ private:
 
     bool setPortSerdesAttribute(sai_object_id_t port_id, sai_attr_id_t attr_id,
                                 vector<uint32_t> &serdes_val);
+    bool getSaiAclBindPointType(Port::Type                type,
+                                sai_acl_bind_point_type_t &sai_acl_bind_type);
 };
 #endif /* SWSS_PORTSORCH_H */
 
